@@ -117,8 +117,7 @@ training_data_L8 = CreateTrainingDF(r = rast_4_RF_l8, training_data = training_d
 
 
 # Prepare the random forest model
-l5 = "l5"
-l8 = "l8"
+
 set.seed(12)
 RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5, mod_name = l5)
 RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8, mod_name = l8)
