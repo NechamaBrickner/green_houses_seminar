@@ -35,7 +35,7 @@ crop_rasters <- lapply(tif_dirs_full, function(d) {
       datestr <- unlist(d_split)[4]
       datestr = paste(substring(datestr, 1, 4), substring(datestr, 5, 6), substring(datestr, 7,8), sep = "_")
       rastname = paste("full_area", datestr, sep="_")
-      rastpath <- file.path(cropped_dir, paste0(rastname, ".tif"))
+      rastpath <- file.path(fullarea_dir, paste0(rastname, ".tif"))
       terra::writeRaster(x= crop_all_layers,
                          filename = rastpath, overwrite = TRUE)
      
@@ -121,7 +121,7 @@ RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5)
 RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8)
 
 # get list of names of cropped raster files
-tif_cropped = list.files(cropped_dir, pattern = "tif$",
+tif_cropped = list.files(fullarea_dir, pattern = "tif$",
                          full.names = TRUE)
 tif_cropped <- tif_cropped[grep(pattern = "full_area", x = tif_cropped)]  #takes only ... by pattern
 
@@ -145,7 +145,7 @@ classified_rasters_l5 = lapply(tif_cropped_l5, function(t){
   r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
   r_split <- unlist(r_split)[1]
   rastname = paste(r_split, "classified_l5", sep="_")
-  rastpath <- file.path(classified_dir, paste0(rastname, ".tif"))
+  rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
   writeRaster(x = rast_classify, filename = rastpath,
               overwrite = TRUE)
   
@@ -161,7 +161,7 @@ classified_rasters_l8 = lapply(tif_cropped_l8, function(t){
   r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
   r_split <- unlist(r_split)[1]
   rastname = paste(r_split, "classified_l8", sep="_")
-  rastpath <- file.path(classified_dir, paste0(rastname, ".tif"))
+  rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
   writeRaster(x = rast_classify, filename = rastpath,
               overwrite = TRUE)
   
@@ -171,7 +171,7 @@ classified_rasters_l8 = lapply(tif_cropped_l8, function(t){
 
 
 # get list of names of classified raster files
-tif_classified = list.files(classified_dir, pattern = "tif$",
+tif_classified = list.files(classified_full_dir, pattern = "tif$",
                          full.names = TRUE)
 tif_classified_l5 <- tif_classified[grep(pattern = "classified_l5", x = tif_classified)]  #takes only... by pattern
 tif_classified_l8 <- tif_classified[grep(pattern = "classified_l8", x = tif_classified)]
@@ -238,7 +238,7 @@ crop_classified_rasters_l5 <- lapply(buffer500$name, function(sa){
     d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
     datestr <- unlist(d_split)[3]
     rastname = paste(sa, datestr,"classified_l5", sep="_")
-    rastpath <- file.path(cropped_dir, paste0(rastname, ".tif"))
+    rastpath <- file.path(classified_cropped_dir, paste0(rastname, ".tif"))
     terra::writeRaster(x= classified_mask,
                        filename = rastpath, overwrite = TRUE)
     plot(classified_mask, main = rastname)
@@ -262,7 +262,7 @@ crop_classified_rasters_l8 <- lapply(buffer500$name, function(sa){
     d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
     datestr <- unlist(d_split)[3]
     rastname = paste(sa, datestr,"classified_l8", sep="_")
-    rastpath <- file.path(cropped_dir, paste0(rastname, ".tif"))
+    rastpath <- file.path(classified_cropped_dir, paste0(rastname, ".tif"))
     terra::writeRaster(x= classified_mask,
                        filename = rastpath, overwrite = TRUE)
     plot(classified_mask, main = rastname)
@@ -271,7 +271,7 @@ crop_classified_rasters_l8 <- lapply(buffer500$name, function(sa){
 })
 
 
-tif_crop_classified = list.files(cropped_dir, pattern = "tif$",
+tif_crop_classified = list.files(classified_cropped_dir, pattern = "tif$",
                                  full.names = TRUE)
 tif_crop_classified <- tif_crop_classified[grep(pattern = "classified", x = tif_crop_classified)]  #takes only... by pattern
 
