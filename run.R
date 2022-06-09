@@ -47,9 +47,10 @@ names(crop_rasters) <- basename(tif_dirs_full) #gives the name of the image by t
 
 #split the raster "list" intp 2 groups by landsat
 # the numbers will change depending on the number of images 
-#computer at the lab 
-crop_rasters_l5 = crop_rasters[8:14]
-crop_rasters_l8 = crop_rasters[1:7]
+
+# #computer at the lab 
+# crop_rasters_l5 = crop_rasters[8:14]
+# crop_rasters_l8 = crop_rasters[1:7]
 
 #my computer
 crop_rasters_l5 = crop_rasters[3:4]
@@ -116,14 +117,16 @@ training_data_L8 = CreateTrainingDF(r = rast_4_RF_l8, training_data = training_d
 
 
 # Prepare the random forest model
+l5 = "l5"
+l8 = "l8"
 set.seed(12)
-RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5)
-RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8)
+RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5, mod_name = l5)
+RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8, mod_name = l8)
 
 # get list of names of cropped raster files
 tif_cropped = list.files(fullarea_dir, pattern = "tif$",
                          full.names = TRUE)
-tif_cropped <- tif_cropped[grep(pattern = "full_area", x = tif_cropped)]  #takes only ... by pattern
+#tif_cropped <- tif_cropped[grep(pattern = "full_area", x = tif_cropped)]  #takes only ... by pattern
 
 #can we make a "variable" of the year in the name to compare to so dividing into l5 and l8 isnt with list...
 
