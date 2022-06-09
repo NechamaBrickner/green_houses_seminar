@@ -132,52 +132,56 @@ tif_cropped = list.files(fullarea_dir, pattern = "tif$",
 
 #need to make 2 list of cropped images by landsat to classify with the correct model
 #
-tif_cropped_l5 = tif_cropped[c(1,3,5,7,9,11,13)]
-tif_cropped_l8 = tif_cropped[c(15,17,19,21,23,24,27)]
+tif_cropped_l5 = tif_cropped[1:2]
+tif_cropped_l8 = tif_cropped[3:4]
 
 #'---------------------------------
 #' Run classification
 #'---------------------------------
 # loop through the cropped raster's and classify them 
-classified_rasters_l5 = lapply(tif_cropped_l5, function(t){
-  # The tif_cropped list already has full path to each file
-  r = rast(t)
-  r = r[[bands]]
-  #plot(r)
-  rast_classify = ApplyRFModel(r, fit = RFmodel_l5) # classify the raster
-  r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
-  r_split <- unlist(r_split)[1]
-  rastname = paste(r_split, "classified_l5", sep="_")
-  rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
-  writeRaster(x = rast_classify, filename = rastpath,
-              overwrite = TRUE)
-  
-  return(rast_classify)
-})
-
-classified_rasters_l8 = lapply(tif_cropped_l8, function(t){
-  # The tif_cropped list already has full path to each file
-  r = rast(t)
-  r = r[[bands]]
-  #plot(r)
-  rast_classify = ApplyRFModel(r, fit = RFmodel_l8) # classify the raster
-  r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
-  r_split <- unlist(r_split)[1]
-  rastname = paste(r_split, "classified_l8", sep="_")
-  rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
-  writeRaster(x = rast_classify, filename = rastpath,
-              overwrite = TRUE)
-  
-  return(rast_classify)
-})
+# classified_rasters_l5 = lapply(tif_cropped_l5, function(t){
+#   # The tif_cropped list already has full path to each file
+#   r = rast(t)
+#   r = r[[bands_l5]]
+#   #plot(r)
+#   rast_classify = ApplyRFModel(r, fit = RFmodel_l5) # classify the raster
+#   r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
+#   r_split <- unlist(r_split)[1]
+#   rastname = paste(r_split, "classified_l5", sep="_")
+#   rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
+#   writeRaster(x = rast_classify, filename = rastpath,
+#               overwrite = TRUE)
+#   
+#   return(rast_classify)
+# })
+# 
+# classified_rasters_l8 = lapply(tif_cropped_l8, function(t){
+#   # The tif_cropped list already has full path to each file
+#   r = rast(t)
+#   r = r[[bands_l8]]
+#   #plot(r)
+#   rast_classify = ApplyRFModel(r, fit = RFmodel_l8) # classify the raster
+#   r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
+#   r_split <- unlist(r_split)[1]
+#   rastname = paste(r_split, "classified_l8", sep="_")
+#   rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
+#   writeRaster(x = rast_classify, filename = rastpath,
+#               overwrite = TRUE)
+#   
+#   return(rast_classify)
+# })
+classified_rasters_l5 = classified_rasters(tif_cropped = tif_cropped_l5, 
+                                           bands = bands_l5, fit = RFmodel_l5, landsat = l5)
+classified_rasters_l8 = classified_rasters(tif_cropped = tif_cropped_l8, 
+                                           bands = bands_l8, fit = RFmodel_l8, landsat = l8)
 #PlotClassified(tif_cropped, classified_rasters)
 
 
 # get list of names of classified raster files
 tif_classified = list.files(classified_full_dir, pattern = "tif$",
                          full.names = TRUE)
-tif_classified_l5 <- tif_classified[grep(pattern = "classified_l5", x = tif_classified)]  #takes only... by pattern
-tif_classified_l8 <- tif_classified[grep(pattern = "classified_l8", x = tif_classified)]
+tif_classified_l5 <- tif_classified[grep(pattern = "l5", x = tif_classified)]  #takes only... by pattern
+tif_classified_l8 <- tif_classified[grep(pattern = "l8", x = tif_classified)]
 
 #' #'---------------------------------
 #' #' albedo band
@@ -273,6 +277,8 @@ crop_classified_rasters_l8 <- lapply(buffer500$name, function(sa){
   })
 })
 
+crop_classified_rasters_l5 =  crop_classified_rasters(tif_classified = tif_classified_l5, landsat = l5)
+crop_classified_rasters_l8 =  crop_classified_rasters(tif_classified = tif_classified_l8, landsat = l8)
 
 tif_crop_classified = list.files(classified_cropped_dir, pattern = "tif$",
                                  full.names = TRUE)
