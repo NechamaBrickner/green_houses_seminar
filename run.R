@@ -176,46 +176,46 @@ tif_classified = list.files(classified_dir, pattern = "tif$",
 tif_classified_l5 <- tif_classified[grep(pattern = "classified_l5", x = tif_classified)]  #takes only... by pattern
 tif_classified_l8 <- tif_classified[grep(pattern = "classified_l8", x = tif_classified)]
 
-#'---------------------------------
-#' albedo band
-#'---------------------------------
-albedo = lapply(tif_cropped, function(t){
-  r = rast(t)
-  albedo_b = albedo_band(cropped = r)
-  d_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
-  datestr <- unlist(d_split)[1]
-  rastname = paste("albedo", datestr, sep="_")
-  rastpath <- file.path(albedo_dir, paste0(rastname, ".tif"))
-  terra::writeRaster(x= albedo_b, filename = rastpath, overwrite = TRUE)
-  plot(albedo_b, main = rastname)
-  
-  return(albedo_b)
-})
-
-
-#'---------------------------------
-#' Land surface temperature
-#'---------------------------------
-LST_crop <- lapply(tif_dirs_full, function(d) {
-    # Get list of TIF files in each dir
-    # Read into rast, and crop
-    tif_list = list.files(d, pattern = "TIF$",
-                          full.names = TRUE, recursive = TRUE)
-    if (length(tif_list) > 0) {
-      LST_b <- LST_band(tif_list, full_area)
-      #print(range(LST_b))
-
-      d_split <- strsplit(x=basename(d), split = "_", fixed = TRUE)
-      datestr <- unlist(d_split)[4]
-      datestr = paste(substring(datestr, 1, 4), substring(datestr, 5, 6), substring(datestr, 7,8), sep = "_")
-      rastname = paste("LST", datestr, "full_area", sep="_")
-      rastpath <- file.path(LST_dir, paste0(rastname, ".tif"))
-      terra::writeRaster(x= LST_b, filename = rastpath, overwrite = TRUE)
-      plot(LST_b, main = paste(rastname, "C", sep = " "))
-      
-      return(LST_b)
-    }
-  })
+#' #'---------------------------------
+#' #' albedo band
+#' #'---------------------------------
+#' albedo = lapply(tif_cropped, function(t){
+#'   r = rast(t)
+#'   albedo_b = albedo_band(cropped = r)
+#'   d_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
+#'   datestr <- unlist(d_split)[1]
+#'   rastname = paste("albedo", datestr, sep="_")
+#'   rastpath <- file.path(albedo_dir, paste0(rastname, ".tif"))
+#'   terra::writeRaster(x= albedo_b, filename = rastpath, overwrite = TRUE)
+#'   plot(albedo_b, main = rastname)
+#'   
+#'   return(albedo_b)
+#' })
+#' 
+#' 
+#' #'---------------------------------
+#' #' Land surface temperature
+#' #'---------------------------------
+#' LST_crop <- lapply(tif_dirs_full, function(d) {
+#'     # Get list of TIF files in each dir
+#'     # Read into rast, and crop
+#'     tif_list = list.files(d, pattern = "TIF$",
+#'                           full.names = TRUE, recursive = TRUE)
+#'     if (length(tif_list) > 0) {
+#'       LST_b <- LST_band(tif_list, full_area)
+#'       #print(range(LST_b))
+#' 
+#'       d_split <- strsplit(x=basename(d), split = "_", fixed = TRUE)
+#'       datestr <- unlist(d_split)[4]
+#'       datestr = paste(substring(datestr, 1, 4), substring(datestr, 5, 6), substring(datestr, 7,8), sep = "_")
+#'       rastname = paste("LST", datestr, "full_area", sep="_")
+#'       rastpath <- file.path(LST_dir, paste0(rastname, ".tif"))
+#'       terra::writeRaster(x= LST_b, filename = rastpath, overwrite = TRUE)
+#'       plot(LST_b, main = paste(rastname, "C", sep = " "))
+#'       
+#'       return(LST_b)
+#'     }
+#'   })
 
 buffer500 = vect(file.path(GIS_dir, "greenhouses.gpkg"),
                  layer="area_buffer500_detailed")
@@ -318,6 +318,5 @@ frequency_table = frequency_table %>%
 t2 = Sys.time()
 elapsed = round(difftime(t2, t0, units = "mins"),2)
 print(paste(t2, "-- End process in", elapsed, "minutes"))
-
 
 
