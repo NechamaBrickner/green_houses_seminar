@@ -311,8 +311,9 @@ crop_classified_rasters = function(tif_classified, landsat) {
       classified_mask = terra::mask(masked, yishuv_mask_r, maskvalues = -999)#maskes the area of the yishuv, makes the the raster size bigger with NA's  
       #save the cropped images
       d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
-      datestr <- unlist(d_split)[3]
-      rastname = paste(sa, datestr,paste0("classified_", landsat), sep="_")
+      yearstr <- unlist(d_split)[3]
+      monthstr <- unlist(d_split)[4]
+      rastname = paste(sa, yearstr, monthstr,paste0("classified_", landsat), sep="_")
       rastpath <- file.path(classified_cropped_dir, paste0(rastname, ".tif"))
       terra::writeRaster(x= classified_mask,
                          filename = rastpath, overwrite = TRUE)
