@@ -257,6 +257,26 @@ ApplyRFModel <- function(r, fit) {
   return(r_predict)
 }
 
+classified_rasters = function(tif_cropped, bands, fit, landsat) {
+  
+  lapply(tif_cropped, function(t){
+  # The tif_cropped list already has full path to each file
+  r = rast(t)
+  r = r[[bands]]
+  #plot(r)
+  rast_classify = ApplyRFModel(r, fit) # classify the raster
+  r_split <- strsplit(x=basename(t), split = ".", fixed = TRUE)
+  r_split <- unlist(r_split)[1]
+  rastname = paste(r_split, paste0("classified_", landsat), sep="_")
+  rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
+  writeRaster(x = rast_classify, filename = rastpath,
+              overwrite = TRUE)
+  
+  return(rast_classify)
+})
+}
+
+
 PlotClassified <- function(rast_list, classified_list) {
   # to add to plots
   #colors = c("gray", "yellow", "cyan", "dark green", "black", "blue")
@@ -273,5 +293,31 @@ PlotClassified <- function(rast_list, classified_list) {
         col = colors,
         main = "Classified")
     #dev.off()
+  })
+}
+
+
+crop_classified_rasters = function(tif_classified, landsat) {
+  lapply(buffer500$name, function(sa){
+    lapply(tif_classified, function(t) {
+      r = rast(t)
+      yishuv_mask_r = rasterize(yishuv_mask, r) #rasterizes the yishuv and othe polygons
+      yishuv_mask_r[yishuv_mask_r ==1] = -999 # changes the polygon value to -999
+      print(paste("In:", sa, "directory:", t))
+      study_area <- buffer500[buffer500$name == sa,]
+      #crop and mask to yishuv out line
+      cropped <- terra::crop(r, study_area)
+      masked = terra::mask(r, study_area)
+      classified_mask = terra::mask(masked, yishuv_mask_r, maskvalues = -999)#maskes the area of the yishuv, makes the the raster size bigger with NA's  
+      #save the cropped images
+      d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
+      datestr <- unlist(d_split)[3]
+      rastname = paste(sa, datestr,paste0("classified_", landsat), sep="_")
+      rastpath <- file.path(classified_cropped_dir, paste0(rastname, ".tif"))
+      terra::writeRaster(x= classified_mask,
+                         filename = rastpath, overwrite = TRUE)
+      plot(classified_mask, main = rastname)
+      return(classified_mask)
+    })
   })
 }
