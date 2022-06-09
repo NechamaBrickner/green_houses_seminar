@@ -55,13 +55,13 @@ if (!dir.exists(output_dir)) {
 }
 
 # folder for cropped images
-cropped_dir <- ".output/cropped"
+cropped_dir <- "./output/cropped"
 if (!dir.exists(cropped_dir)) {
   dir.create(cropped_dir)
 }
 
 # folder for cropped images
-fullarea_dir <- ".output/fullarea"
+fullarea_dir <- "./output/fullarea"
 if (!dir.exists(fullarea_dir)) {
   dir.create(fullarea_dir)
 }
