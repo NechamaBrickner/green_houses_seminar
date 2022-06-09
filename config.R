@@ -1,6 +1,6 @@
 # Install and load packages
 pkg_list = c(
-  #"getSpatialData",  # download Landsat tiles
+  "getSpatialData",  # download Landsat tiles
   "terra", "raster", # read rasters
   "sf",              # vector layers
   "parallel",        # parallel processing
@@ -33,6 +33,8 @@ lapply(pkg_list, library, character.only = TRUE)
 
 # creates folder Paths
 # -------------------------
+# Setup individually depending on local paths in each computer
+
 GIS_dir = "./GIS"
 if (!dir.exists(GIS_dir)) {
   dir.create(GIS_dir)
@@ -63,6 +65,12 @@ if (!dir.exists(LST_dir)) {
   dir.create(LST_dir)
 }
 
+# folder for  LST output
+albedo_dir = "./output/albedo"
+if (!dir.exists(albedo_dir)) {
+  dir.create(albedo_dir)
+}
+
 # folder for classified raster's output
 classified_dir = "./output/Classified"
 if (!dir.exists(classified_dir)) {
@@ -70,4 +78,5 @@ if (!dir.exists(classified_dir)) {
 }
 
 # Bands to be used in the RF model
-bands=c("green","NIR","SWIR1", "variance", "contrast", "NDVI")
+bands_l5=c("blue","NIR","SWIR1", "variance", "NDVI", "BSI", "NDBI")
+bands_l8=c("green", "NIR","SWIR2", "variance", "NDVI", "BSI", "NDBI")
