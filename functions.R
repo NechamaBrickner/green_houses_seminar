@@ -1,37 +1,37 @@
-DownloadLandsat <- function(area, date_ranges_file){
-
-  #----------------------
-  # This is not working! 
-  #----------------------
-
-  # Configs for getSpatialData
-  #
-  set_aoi(as_Spatial(area))
-  set_archive(dataset_dir)
-  # Login credentials prepared in advance, and saved to RDS file
-  creds <- readRDS("credentials.rds")
-  login_USGS(username=creds$username, password=creds$passwd)
-  date_ranges <- read.csv("date_ranges.csv")
-  tif_dir_list <- lapply(1:nrow(date_ranges), function(r){
-                       from_date = as.character(date_ranges[r,1])
-                       to_date = as.character(date_ranges[r, 2])
-                       time_range=c(from_date, to_date)
-                       rec8 = getLandsat_records(time_range=time_range,
-                           products = c("landsat_8_c1"),
-                       )
-                       if (length(rec8) != 0) {
-                           getLandsat_data(rec8)
-                       }
-                      rec5 = getLandsat_records(time_range,
-                           products = c("landsat_tm_c2_l1")
-                       )
-                      if (length(rec5) != 0) {
-                          getLandat_data(rec5)
-                      }
-  })
-}
-
-
+# DownloadLandsat <- function(area, date_ranges_file){
+# 
+#   #----------------------
+#   # This is not working! 
+#   #----------------------
+# 
+#   # Configs for getSpatialData
+#   #
+#   set_aoi(as_Spatial(area))
+#   set_archive(dataset_dir)
+#   # Login credentials prepared in advance, and saved to RDS file
+#   creds <- readRDS("credentials.rds")
+#   login_USGS(username=creds$username, password=creds$passwd)
+#   date_ranges <- read.csv("date_ranges.csv")
+#   tif_dir_list <- lapply(1:nrow(date_ranges), function(r){
+#                        from_date = as.character(date_ranges[r,1])
+#                        to_date = as.character(date_ranges[r, 2])
+#                        time_range=c(from_date, to_date)
+#                        rec8 = getLandsat_records(time_range=time_range,
+#                            products = c("landsat_8_c1"),
+#                        )
+#                        if (length(rec8) != 0) {
+#                            getLandsat_data(rec8)
+#                        }
+#                       rec5 = getLandsat_records(time_range,
+#                            products = c("landsat_tm_c2_l1")
+#                        )
+#                       if (length(rec5) != 0) {
+#                           getLandat_data(rec5)
+#                       }
+#   })
+# }
+# 
+# 
 
 CropDatasets <- function(tif_list, study_area) {
   # Read list of TIF files into stack
@@ -115,34 +115,34 @@ AddImageTexture <- function(cropped) {
 #   st_write(superpxl, shppath, append = FALSE) #save the superpixel as a gpkg file, and overwrite if the file already exists 
 # }
 
-LST_band = function(tif_list, study_area) {
-  
-  if (length(grep(pattern = "LT05", tif_list, fixed = TRUE)) > 0) {
-    #select thermal band landsat 5 - B6
-    LST_05 <- tif_list[grep(pattern="LT05_", x = tif_list)]
-    LST_05 <- LST_05[grep(pattern="ST", x = LST_05)]
-    LST_05 <- LST_05[grep(pattern = "B6", x = LST_05)]  
-    LST <- rast(LST_05)
-  }
-  else {
-    #select thermal band landsat 8 - B10
-    LST_08 <- tif_list[grep(pattern="LC08_", x=tif_list)]
-    LST_08 <- LST_08[grep(pattern="ST", x=LST_08)]
-    LST_08 <- LST_08[grep(pattern = "B10", x = LST_08)] 
-    LST <- rast(LST_08)
-  }
-  names(LST) <- "LST"
-  cropped <- crop(LST, study_area)
-  #rescale factor for theral band
-  # landsat 8 https://prd-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/atoms/files/LSDS-1619_Landsat-8-Collection2_Level-2_Science-Product-Guide-v3.pdf
-  # landsat 5 https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/files/LSDS-1618_Landsat-4-7_C2-L2-ScienceProductGuide-v4.pdf
-  cropped = cropped*0.00341802+149.0-272.15 
- 
-  return(cropped)
-}
-
-
-albedo_band = function(cropped) {
-  albedo = (cropped$blue*0.356 + cropped$red*0.13 + cropped$NIR*0.373 + cropped$SWIR1*0.085+ cropped$SWIR2*0.072 - 0.0018)/1.016
-  return(albedo)
-}
+# LST_band = function(tif_list, study_area) {
+#   
+#   if (length(grep(pattern = "LT05", tif_list, fixed = TRUE)) > 0) {
+#     #select thermal band landsat 5 - B6
+#     LST_05 <- tif_list[grep(pattern="LT05_", x = tif_list)]
+#     LST_05 <- LST_05[grep(pattern="ST", x = LST_05)]
+#     LST_05 <- LST_05[grep(pattern = "B6", x = LST_05)]  
+#     LST <- rast(LST_05)
+#   }
+#   else {
+#     #select thermal band landsat 8 - B10
+#     LST_08 <- tif_list[grep(pattern="LC08_", x=tif_list)]
+#     LST_08 <- LST_08[grep(pattern="ST", x=LST_08)]
+#     LST_08 <- LST_08[grep(pattern = "B10", x = LST_08)] 
+#     LST <- rast(LST_08)
+#   }
+#   names(LST) <- "LST"
+#   cropped <- crop(LST, study_area)
+#   #rescale factor for theral band
+#   # landsat 8 https://prd-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/atoms/files/LSDS-1619_Landsat-8-Collection2_Level-2_Science-Product-Guide-v3.pdf
+#   # landsat 5 https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/files/LSDS-1618_Landsat-4-7_C2-L2-ScienceProductGuide-v4.pdf
+#   cropped = cropped*0.00341802+149.0-272.15 
+#  
+#   return(cropped)
+# }
+# 
+# 
+# albedo_band = function(cropped) {
+#   albedo = (cropped$blue*0.356 + cropped$red*0.13 + cropped$NIR*0.373 + cropped$SWIR1*0.085+ cropped$SWIR2*0.072 - 0.0018)/1.016
+#   return(albedo)
+# }
