@@ -166,7 +166,7 @@ Prepare_RF_Model_minimal = function(training_data){
 
 ##################################
 
-Prepare_RF_Model <- function(training_data) {
+Prepare_RF_Model <- function(training_data, mod_name) {
   # Limit number of variables that will be tried in train()
   # To limit how many variable comgination are tried, We can set either:
   # set tuneGrid (specify values for each parameter), or
@@ -212,7 +212,7 @@ Prepare_RF_Model <- function(training_data) {
   )
   
   # Save model
-  model_rds <- file.path(output_dir, "fitted_RF_model.RDS")
+  model_rds <- file.path(output_dir,  paste(mod_name, "fitted_RF_model.RDS"))
   saveRDS(rfFit, model_rds)
   # Model results:
   cat("\nModel accuracy:\n")
@@ -222,7 +222,7 @@ Prepare_RF_Model <- function(training_data) {
   var_importance <- varImp(rfFit, scale=TRUE)
   cat("\nVariable importance:\n")
   print(var_importance)
-  varimp_file <- file.path(output_dir, "variable_importance.png")
+  varimp_file <- file.path(output_dir, paste(mod_name,"variable_importance.png"))
   vip <- ggplot(var_importance)
   ggsave(varimp_file, plot = vip)
   #png(varimp_file)
