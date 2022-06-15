@@ -53,8 +53,8 @@ names(crop_rasters) <- basename(tif_dirs_full) #gives the name of the image by t
 # crop_rasters_l8 = crop_rasters[1:7]
 
 #my computer
-crop_rasters_l5 = crop_rasters[3:4]
-crop_rasters_l8 = crop_rasters[1:2]
+crop_rasters_l5 = crop_rasters[4:10]
+crop_rasters_l8 = crop_rasters[1:3]
 #'---------------------------------
 #' Random Forest classification
 #'---------------------------------
@@ -119,8 +119,8 @@ training_data_L8 = CreateTrainingDF(r = rast_4_RF_l8, training_data = training_d
 # Prepare the random forest model
 
 set.seed(12)
-RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5, mod_name = l5)
-RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8, mod_name = l8)
+RFmodel_l5 = Prepare_RF_Model(training_data = training_data_L5, mod_name =  landsat5)
+RFmodel_l8 = Prepare_RF_Model(training_data = training_data_L8, mod_name = landsat8)
 
 # get list of names of cropped raster files
 tif_cropped = list.files(fullarea_dir, pattern = "tif$",
@@ -131,8 +131,8 @@ tif_cropped = list.files(fullarea_dir, pattern = "tif$",
 
 #need to make 2 list of cropped images by landsat to classify with the correct model
 #
-tif_cropped_l5 = tif_cropped[1:2]
-tif_cropped_l8 = tif_cropped[3:4]
+tif_cropped_l5 = tif_cropped[1:7]
+tif_cropped_l8 = tif_cropped[8:10]
 
 #'---------------------------------
 #' Run classification
@@ -170,9 +170,9 @@ tif_cropped_l8 = tif_cropped[3:4]
 #   return(rast_classify)
 # })
 classified_rasters_l5 = classified_rasters(tif_cropped = tif_cropped_l5, 
-                                           bands = bands_l5, fit = RFmodel_l5, landsat = l5)
+                                           bands = bands_l5, fit = RFmodel_l5, landsat = landsat5)
 classified_rasters_l8 = classified_rasters(tif_cropped = tif_cropped_l8, 
-                                           bands = bands_l8, fit = RFmodel_l8, landsat = l8)
+                                           bands = bands_l8, fit = RFmodel_l8, landsat = landsat8)
 #PlotClassified(tif_cropped, classified_rasters)
 
 
@@ -276,8 +276,8 @@ yishuv_mask = vect(file.path(GIS_dir, "greenhouses.gpkg"),
 #   })
 # })
 
-crop_classified_rasters_l5 =  crop_classified_rasters(tif_classified = tif_classified_l5, landsat = l5)
-crop_classified_rasters_l8 =  crop_classified_rasters(tif_classified = tif_classified_l8, landsat = l8)
+crop_classified_rasters_l5 =  crop_classified_rasters(tif_classified = tif_classified_l5, landsat = landsat5)
+crop_classified_rasters_l8 =  crop_classified_rasters(tif_classified = tif_classified_l8, landsat = landsat8)
 
 tif_crop_classified = list.files(classified_cropped_dir, pattern = "tif$",
                                  full.names = TRUE)
