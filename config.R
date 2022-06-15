@@ -90,7 +90,7 @@ if (!dir.exists(classified_cropped_dir)) {
 # }
 
 landsat5 = "l5"
-landsatl8 = "l8"
+landsat8 = "l8"
 
 # Bands to be used in the RF model
 bands_l5=c("blue","NIR","SWIR1", "variance", "NDVI", "BSI", "NDBI")
