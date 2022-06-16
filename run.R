@@ -281,44 +281,36 @@ crop_classified_rasters_l8 =  crop_classified_rasters(tif_classified = tif_class
 
 tif_crop_classified = list.files(classified_cropped_dir, pattern = "tif$",
                                  full.names = TRUE)
-#tif_crop_classified <- tif_crop_classified[grep(pattern = "classified", x = tif_crop_classified)]  #takes only... by pattern
 
+tif_cc_Hazeva <- tif_crop_classified[grep(pattern = "Hazeva", x = tif_crop_classified)]  #takes only... by pattern
+tif_cc_Ein_Yahav <- tif_crop_classified[grep(pattern = "Ein_Yahav", x = tif_crop_classified)]  #takes only... by pattern
+tif_cc_Paran <- tif_crop_classified[grep(pattern = "Paran", x = tif_crop_classified)]  #takes only... by pattern
+
+
+frequency_table_hazeva = frequency_table(tif_cc = tif_cc_Hazeva)
+frequency_table_ein_yahav = frequency_table(tif_cc = tif_cc_Ein_Yahav)
+frequency_table_paran = frequency_table(tif_cc = tif_cc_Paran)
 
 #gets name of pic with out .tif at end and ./croppped/ at begining
-name_yishuv = substr(tif_crop_classified,1,nchar(tif_crop_classified)-18)
-name_yishuv = substr(name_yishuv, 29, nchar(name_yishuv))
+# name_yishuv = substr(tif_crop_classified,1,nchar(tif_crop_classified)-18)
+# name_yishuv = substr(name_yishuv, 29, nchar(name_yishuv))
 
 # df to join with nams of each raster
-num = 1:length(name_yishuv)
-names = data.frame(num, name_yishuv)
+#num = 1:length(name_yishuv)
+#names = data.frame(num, name_yishuv)
 
-
-# frequency_table = lapply(tif_crop_classified, function(t){
-#   r = rast(t)
-#   ft = (freq(r))
-#   return(ft)
-# })
-# 
 # names(frequency_table) <- basename(tif_crop_classified)
 
+# classified_r = rast(tif_crop_classified)
+# names(classified_r) = name_yishuv
+# plot(classified_r)
 
-classified_y = rast(tif_crop_classified)
-names(classified_y) = name_yishuv
-plot(classified_y)
-
-frequency_table = as.data.frame(freq(classified_y)) # calculate the frequency of each land type per band in a dataframe
-frequency_table = frequency_table %>%
-  left_join(names, by = c("layer" = "num"))%>% # join with df of raster names
-  group_by(layer) %>%
-  mutate(porportion = count/sum(count)*100)%>%#add percentage of each land type
-  select(name_yishuv, everything())
-
-
-# frequency_table = sapply(tif_crop_classified, function(t){
-#   r = rast(t)
-#   ft = freq(r)
-#   return(ft)
-# })
+# frequency_table = as.data.frame(freq(classified_r)) # calculate the frequency of each land type per band in a dataframe
+# frequency_table = frequency_table %>%
+#   left_join(names, by = c("layer" = "num"))%>% # join with df of raster names
+#   group_by(layer) %>%
+#   mutate(porportion = count/sum(count)*100)%>%#add percentage of each land type
+#   select(name_yishuv, everything())
 
 #'---------------------------------
 #' Completed
@@ -326,5 +318,4 @@ frequency_table = frequency_table %>%
 t2 = Sys.time()
 elapsed = round(difftime(t2, t0, units = "mins"),2)
 print(paste(t2, "-- End process in", elapsed, "minutes"))
-
 
