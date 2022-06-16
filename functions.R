@@ -101,6 +101,26 @@ AddImageTexture <- function(cropped) {
 }
 
 
+frequency_table = function(tif_cc){
+  #gets name of pic with out .tif at end and ./croppped/ at begining
+  name = substr(tif_cc,1,nchar(tif_cc)-18)
+  name = substr(name, 29, nchar(name))
+  # df to join with nams of each raster
+  num = 1:length(name)
+  df = data.frame(num, name)
+  #take the list of files and turn to multiband raster
+  r_tif_cc = rast(tif_cc)
+  names(r_tif_cc) = name # give each band the name from name
+  #plot(hazeva_r)
+  ft = as.data.frame(freq(r_tif_cc)) # calculate the frequency of each land type per band in a dataframe
+  ft = ft %>%
+    left_join(df, by = c("layer" = "num"))%>% # join with df of raster names
+    group_by(layer) %>%
+    mutate(porportion = count/sum(count)*100) %>% #add percentage of each land type
+    select(name, everything())
+  return(ft)
+}
+
 # not using supercells
 # Perform_Segmentation <- function(all_layers, d, sa) {
 #   superpxl <- supercells(all_layers,
