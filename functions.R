@@ -101,7 +101,7 @@ AddImageTexture <- function(cropped) {
 }
 
 
-frequency_table = function(tif_cc){
+frequency_table = function(tif_cc, yishuv){
   #gets name of pic with out .tif at end and ./croppped/ at begining
   name = substr(tif_cc,1,nchar(tif_cc)-18)
   name = substr(name, 29, nchar(name))
@@ -118,6 +118,10 @@ frequency_table = function(tif_cc){
     group_by(layer) %>%
     mutate(porportion = count/sum(count)*100) %>% #add percentage of each land type
     select(name, everything())
+  
+  table_path <- file.path(output_dir, paste0("frequency_table_", yishuv, ".csv"))
+  write.csv(ft, table_path)
+
   return(ft)
 }
 
