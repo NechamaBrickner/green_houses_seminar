@@ -287,9 +287,12 @@ tif_cc_Ein_Yahav <- tif_crop_classified[grep(pattern = "Ein_Yahav", x = tif_crop
 tif_cc_Paran <- tif_crop_classified[grep(pattern = "Paran", x = tif_crop_classified)]  #takes only... by pattern
 
 
-frequency_table_hazeva = frequency_table(tif_cc = tif_cc_Hazeva)
-frequency_table_ein_yahav = frequency_table(tif_cc = tif_cc_Ein_Yahav)
-frequency_table_paran = frequency_table(tif_cc = tif_cc_Paran)
+frequency_table_hazeva = frequency_table(tif_cc = tif_cc_Hazeva, yishuv = yishuv_n[1])
+frequency_table_ein_yahav = frequency_table(tif_cc = tif_cc_Ein_Yahav, yishuv = yishuv_n[2])
+frequency_table_paran = frequency_table(tif_cc = tif_cc_Paran, yishuv = yishuv_n[3])
+
+
+
 
 #gets name of pic with out .tif at end and ./croppped/ at begining
 # name_yishuv = substr(tif_crop_classified,1,nchar(tif_crop_classified)-18)
