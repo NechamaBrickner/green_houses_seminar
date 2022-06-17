@@ -101,6 +101,20 @@ AddImageTexture <- function(cropped) {
 }
 
 
+
+rast_cc = function(tif_cc){
+  #gets name of pic with out .tif at end and ./croppped/ at begining
+  name = substr(tif_cc,1,nchar(tif_cc)-18)
+  name = substr(name, 29, nchar(name))
+  #take the list of files and turn to multiband raster
+  r_tif_cc = rast(tif_cc)
+  names(r_tif_cc) = name # give each band the name from name
+  #r_tif_cc = paste0(r_tif_cc, yishuv)
+  #plot(hazeva_r)
+  return(r_tif_cc)
+}
+
+
 frequency_table = function(tif_cc, yishuv){
   #gets name of pic with out .tif at end and ./croppped/ at begining
   name = substr(tif_cc,1,nchar(tif_cc)-18)
@@ -119,7 +133,7 @@ frequency_table = function(tif_cc, yishuv){
     mutate(porportion = count/sum(count)*100) %>% #add percentage of each land type
     select(name, everything())
   
-  table_path <- file.path(output_dir, paste0("frequency_table_", yishuv, ".csv"))
+  table_path <- file.path(output_dir, paste0("frequency_table_1", yishuv, ".csv"))
   write.csv(ft, table_path)
 
   return(ft)
