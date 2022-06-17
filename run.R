@@ -53,7 +53,7 @@ names(crop_rasters) <- basename(tif_dirs_full) #gives the name of the image by t
 # crop_rasters_l8 = crop_rasters[1:7]
 
 #my computer
-crop_rasters_l5 = crop_rasters[4:10]
+crop_rasters_l5 = crop_rasters[4:11]
 crop_rasters_l8 = crop_rasters[1:3]
 #'---------------------------------
 #' Random Forest classification
@@ -131,8 +131,8 @@ tif_cropped = list.files(fullarea_dir, pattern = "tif$",
 
 #need to make 2 list of cropped images by landsat to classify with the correct model
 #
-tif_cropped_l5 = tif_cropped[1:7]
-tif_cropped_l8 = tif_cropped[8:10]
+tif_cropped_l5 = tif_cropped[1:8]
+tif_cropped_l8 = tif_cropped[9:11]
 
 #'---------------------------------
 #' Run classification
@@ -286,6 +286,29 @@ tif_cc_Hazeva <- tif_crop_classified[grep(pattern = "Hazeva", x = tif_crop_class
 tif_cc_Ein_Yahav <- tif_crop_classified[grep(pattern = "Ein_Yahav", x = tif_crop_classified)]  #takes only... by pattern
 tif_cc_Paran <- tif_crop_classified[grep(pattern = "Paran", x = tif_crop_classified)]  #takes only... by pattern
 
+rast_cc_hazeva = rast_cc(tif_cc = tif_cc_Hazeva)
+rast_cc_ein_yahav = rast_cc(tif_cc = tif_cc_Ein_Yahav)
+rast_cc_paran = rast_cc(tif_cc = tif_cc_Paran)
+
+col = c("gray", "yellow", "cyan", "dark green")
+lev = levels(training_data_L5$ground_type)
+
+pdf(file ="./output/h.pdf", width = 9.5, height = 5)
+plot(rast_cc_hazeva, col = col, legend = FALSE)#type = "classes", levels = lev )
+dev.off()
+pdf(file ="./output/ey.pdf", width = 6, height = 5)
+plot(rast_cc_ein_yahav, col = col, legend = FALSE)#type = "classes", levels = lev)
+dev.off()
+pdf(file ="./output/p.pdf", width = 9, height = 5)
+plot(rast_cc_paran, col = col, legend = FALSE)#type = "classes", levels = lev)
+dev.off()
+
+pdf(file ="./output/p_legend.pdf", width = 7, height = 5)
+plot(rast_cc_paran$Paran_1985_01, col = col,type = "classes", levels = lev, legend = "bottomleft")
+dev.off()
+
+
+#plotRGB(crop_rasters$LT05_L2SP_174039_19900227_20200916_02_T1, 3, 2, 1, scale = 1)
 
 frequency_table_hazeva = frequency_table(tif_cc = tif_cc_Hazeva, yishuv = yishuv_n[1])
 frequency_table_ein_yahav = frequency_table(tif_cc = tif_cc_Ein_Yahav, yishuv = yishuv_n[2])
