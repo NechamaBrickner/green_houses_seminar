@@ -308,8 +308,9 @@ crop_classified_rasters = function(tif_classified, landsat) {
       #crop and mask to yishuv out line
       #cropped <- terra::crop(r, study_area)
       masked = terra::mask(r, study_area)
-      classified_mask = terra::mask(masked, yishuv_mask_r, maskvalues = -999)#maskes the area of the yishuv, makes the the raster size bigger with NA's
-      cropped <- terra::crop(classified_mask, study_area)
+      #classified_mask = terra::mask(masked, yishuv_mask_r, maskvalues = -999)#maskes the area of the yishuv, makes the the raster size bigger with NA's
+      #cropped <- terra::crop(classified_mask, study_area)
+      cropped <- terra::crop(masked, study_area)
       #save the cropped images
       d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
       yearstr <- unlist(d_split)[3]
@@ -320,7 +321,8 @@ crop_classified_rasters = function(tif_classified, landsat) {
                          filename = rastpath, overwrite = TRUE)
       #plot(classified_mask, main = rastname)
       plot(cropped, main = rastname)
-      return(classified_mask)
+      #return(classified_mask)
+      return(cropped)
     })
   })
 }
