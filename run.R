@@ -290,8 +290,9 @@ rast_cc_hazeva = rast_cc(tif_cc = tif_cc_Hazeva)
 rast_cc_ein_yahav = rast_cc(tif_cc = tif_cc_Ein_Yahav)
 rast_cc_paran = rast_cc(tif_cc = tif_cc_Paran)
 
-col = c("gray", "yellow", "cyan", "dark green")
+col = c("gray", "navajowhite1", "lightskyblue1", "dark green")
 lev = levels(training_data_L5$ground_type)
+#lev1 = levels(c("Light Green houses", "Dark Green Houses", "Orchard", "Ground"))
 
 pdf(file ="./output/h.pdf", width = 9.5, height = 5)
 plot(rast_cc_hazeva, col = col, legend = FALSE)#type = "classes", levels = lev )
@@ -303,7 +304,8 @@ pdf(file ="./output/p.pdf", width = 9, height = 5)
 plot(rast_cc_paran, col = col, legend = FALSE)#type = "classes", levels = lev)
 dev.off()
 
-pdf(file ="./output/p_legend.pdf", width = 7, height = 5)
+# plot to get legend
+pdf(file ="./output/p_legend.pdf", width = 10, height = 5)
 plot(rast_cc_paran$Paran_1985_01, col = col,type = "classes", levels = lev, legend = "bottomleft")
 dev.off()
 
