@@ -53,8 +53,13 @@ names(crop_rasters) <- basename(tif_dirs_full) #gives the name of the image by t
 # crop_rasters_l8 = crop_rasters[1:7]
 
 #my computer
-crop_rasters_l5 = crop_rasters[4:11]
+crop_rasters_l5 = crop_rasters[4:10]
 crop_rasters_l8 = crop_rasters[1:3]
+
+#my computer with 2 1995
+# crop_rasters_l5 = crop_rasters[4:11]
+# crop_rasters_l8 = crop_rasters[1:3]
+
 #'---------------------------------
 #' Random Forest classification
 #'---------------------------------
@@ -131,8 +136,12 @@ tif_cropped = list.files(fullarea_dir, pattern = "tif$",
 
 #need to make 2 list of cropped images by landsat to classify with the correct model
 #
-tif_cropped_l5 = tif_cropped[1:8]
-tif_cropped_l8 = tif_cropped[9:11]
+tif_cropped_l5 = tif_cropped[1:7]
+tif_cropped_l8 = tif_cropped[8:10]
+
+#my computer with 2 1995
+# tif_cropped_l5 = tif_cropped[1:8]
+# tif_cropped_l8 = tif_cropped[9:11]
 
 #'---------------------------------
 #' Run classification
@@ -305,8 +314,10 @@ plot(rast_cc_paran, col = col, legend = FALSE)#type = "classes", levels = lev)
 dev.off()
 
 # plot to get legend
-pdf(file ="./output/p_legend.pdf", width = 10, height = 5)
+pdf(file ="./output/p_legend2.pdf", width = 12, height = 5)
 plot(rast_cc_paran$Paran_1985_01, col = col,type = "classes", levels = lev, legend = "bottomleft")
+sbar(2000, xy= c(700500, 3361000), type="bar", divs=4, label = c(0,1,2), cex = 0.9) #below = "Km",adj = c(-2, -0.1)
+#north(type=1)
 dev.off()
 
 
