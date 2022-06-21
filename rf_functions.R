@@ -257,6 +257,7 @@ ApplyRFModel <- function(r, fit) {
   return(r_predict)
 }
 
+#classifies the raster takes list of rasters, what bands to use, model and landsat name
 classified_rasters = function(tif_cropped, bands, fit, landsat) {
   
   lapply(tif_cropped, function(t){
@@ -273,7 +274,7 @@ classified_rasters = function(tif_cropped, bands, fit, landsat) {
               overwrite = TRUE)
   
   return(rast_classify)
-})
+  })
 }
 
 
@@ -296,7 +297,7 @@ PlotClassified <- function(rast_list, classified_list) {
   })
 }
 
-
+#saves the classified images cropped to the ysihuv
 crop_classified_rasters = function(tif_classified, landsat) {
   lapply(buffer500$name, function(sa){
     lapply(tif_classified, function(t) {
