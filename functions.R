@@ -114,7 +114,7 @@ rast_cc = function(tif_cc){
   return(r_tif_cc)
 }
 
-
+#create a table with the frequency of each ground type in every raster, takes raster list and yishuv
 frequency_table = function(tif_cc, yishuv){
   #gets name of pic with out .tif at end and ./croppped/ at begining
   name = substr(tif_cc,1,nchar(tif_cc)-18)
