@@ -291,10 +291,12 @@ crop_classified_rasters_l8 =  crop_classified_rasters(tif_classified = tif_class
 tif_crop_classified = list.files(classified_cropped_dir, pattern = "tif$",
                                  full.names = TRUE)
 
+#tiff list of all classified rasters by yishuv
 tif_cc_Hazeva <- tif_crop_classified[grep(pattern = "Hazeva", x = tif_crop_classified)]  #takes only... by pattern
 tif_cc_Ein_Yahav <- tif_crop_classified[grep(pattern = "Ein_Yahav", x = tif_crop_classified)]  #takes only... by pattern
 tif_cc_Paran <- tif_crop_classified[grep(pattern = "Paran", x = tif_crop_classified)]  #takes only... by pattern
 
+#multiband raster of all cropped classified rasters by yishuv
 rast_cc_hazeva = rast_cc(tif_cc = tif_cc_Hazeva)
 rast_cc_ein_yahav = rast_cc(tif_cc = tif_cc_Ein_Yahav)
 rast_cc_paran = rast_cc(tif_cc = tif_cc_Paran)
@@ -303,6 +305,7 @@ col = c("gray", "navajowhite1", "lightskyblue1", "dark green")
 lev = levels(training_data_L5$ground_type)
 #lev1 = levels(c("Light Green houses", "Dark Green Houses", "Orchard", "Ground"))
 
+#plot to pdf all classified rasters by yishuv
 pdf(file ="./output/h.pdf", width = 9.5, height = 5)
 plot(rast_cc_hazeva, col = col, legend = FALSE)#type = "classes", levels = lev )
 dev.off()
