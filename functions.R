@@ -82,7 +82,7 @@ AddImageTexture <- function(cropped) {
   # -------------------------------
   # Do we want also an NDVI band?
   ndvi <- ((cropped$NIR - cropped$red) / (cropped$NIR + cropped$red))
-  bsi =  (((cropped$SWIR1 - cropped$red) - (cropped$NIR - cropped$blue))/(cropped$SWIR1 +cropped$red) +(cropped$NIR+cropped$blue)) #bare soil index
+  bsi =  (((cropped$SWIR1 + cropped$red) - (cropped$NIR + cropped$blue))/(cropped$SWIR1 +cropped$red) +(cropped$NIR+cropped$blue)) #bare soil index
   ndbi = ((cropped$SWIR1 - cropped$NIR) / (cropped$SWIR1 + cropped$NIR)) #Normalized Difference Built-up Index
   index = c(ndvi, bsi, ndbi)
   names(index) <- c("NDVI", "BSI", "NDBI")
