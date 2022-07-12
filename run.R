@@ -146,7 +146,7 @@ tif_cropped_l8 = tif_cropped[8:10]
 #'---------------------------------
 #' Run classification
 #'---------------------------------
-# loop through the cropped raster's and classify them 
+# loop through the cropped raster's and classify them
 # classified_rasters_l5 = lapply(tif_cropped_l5, function(t){
 #   # The tif_cropped list already has full path to each file
 #   r = rast(t)
@@ -159,7 +159,7 @@ tif_cropped_l8 = tif_cropped[8:10]
 #   rastpath <- file.path(classified_full_dir, paste0(rastname, ".tif"))
 #   writeRaster(x = rast_classify, filename = rastpath,
 #               overwrite = TRUE)
-#   
+#
 #   return(rast_classify)
 # })
 # 
