@@ -327,3 +327,25 @@ crop_classified_rasters = function(tif_classified, landsat) {
     })
   })
 }
+
+crop_yishuv = function(tif_cropped, landsat) {
+  lapply(buffer500$Name, function(sa){
+    lapply(tif_cropped, function(t) {
+      r = rast(t)
+      print(paste("In:", sa, "directory:", t))
+      study_area <- buffer500[buffer500$Name == sa,]
+      #mask and crop to yishuv out line
+      masked = terra::mask(r, study_area)
+      cropped <- terra::crop(masked, study_area)
+      #save the cropped images
+      d_split <- strsplit(x=basename(t), split = "_", fixed = TRUE)
+      yearstr <- unlist(d_split)[3]
+      yearstr = substr(yearstr,1,nchar(yearstr)-4)
+      rastname = paste(sa, yearstr, landsat, sep="_")
+      rastpath <- file.path(cropped_yishuv_dir, paste0(rastname, ".tif"))
+      terra::writeRaster(x= cropped,
+                         filename = rastpath, overwrite = TRUE)
+      return(cropped)
+    })
+  })
+}
