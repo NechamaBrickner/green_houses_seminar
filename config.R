@@ -54,10 +54,10 @@ if (!dir.exists(output_dir)) {
   dir.create(output_dir)
 }
 
-# folder for cropped images
-cropped_dir <- "./output/cropped"
-if (!dir.exists(cropped_dir)) {
-  dir.create(cropped_dir)
+# folder for cropped yishuv images
+cropped_yishuv_dir <- "./output/cropped_yishuv"
+if (!dir.exists(cropped_yishuv_dir)) {
+  dir.create(cropped_yishuv_dir)
 }
 
 # folder for cropped images
