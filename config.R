@@ -8,7 +8,8 @@ pkg_list = c(
   "remotes",         # to use github to install packages
   "glcm",            # Greylevel co-location matrix
   "caret","ranger",  # ML models
-  "dplyr", "tools"
+  "dplyr", "tools",
+  "reshape"
 )
 
 # installs packages that are not installed 
