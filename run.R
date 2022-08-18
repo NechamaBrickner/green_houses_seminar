@@ -395,6 +395,57 @@ sbar(2000, xy= c(700500, 3361000), type="bar", divs=4, label = c(0,1,2), cex = 0
 #north(type=1)
 dev.off()
 
+#turn the rasters into df to plot with ggplot
+df_hazeva = raster_to_df(rast_cc_hazeva)
+df_ein_yahav = raster_to_df(rast_cc_ein_yahav)
+df_paran = raster_to_df(rast_cc_paran)
+
+pdf("./output/hazeva_9_n.pdf", width = 10, height = 8)
+ggplot()+
+  geom_raster(data = df_hazeva, aes(x=x, y=y, fill = value_c))+
+  facet_wrap(~variable)+
+  scale_fill_manual(name = "Land Cover Classes",
+                    values = c("Dark GH" = "gray",
+                               "Light GH" = "lightskyblue1",
+                               "Open Ground" = "navajowhite1",
+                               "Orchard and Vegetation" = "dark green"))+
+  coord_fixed(ratio = 1)+
+  theme(legend.position="bottom")+
+  #geom_sf(fill = "transparent", data = b_h) #changes the coords to geo
+  scale_x_continuous(breaks = seq(712500, 722500, by = 2000))+
+  scale_y_continuous(breaks = seq(3402500,3410000, by = 2000))
+dev.off()
+
+pdf("./output/ein_yahav_9_n.pdf", width = 8, height = 10)
+ggplot()+
+  geom_raster(data = df_ein_yahav, aes(x=x, y=y, fill = value_c))+
+  facet_wrap(~variable)+
+  scale_fill_manual(name = "Land Cover Classes",
+                    values = c("Dark GH" = "gray",
+                               "Light GH" = "lightskyblue1",
+                               "Open Ground" = "navajowhite1",
+                               "Orchard and Vegetation" = "dark green"))+
+  coord_fixed(ratio = 1) +
+  theme(legend.position="bottom")+
+  scale_x_continuous(breaks = seq(712500, 717500, by = 2500))+
+  scale_y_continuous(breaks = seq(3390000,3400000, by = 2500))
+dev.off()
+
+pdf("./output/paran_9_n.pdf", width = 10, height = 9)
+ggplot()+
+  geom_raster(data = df_paran, aes(x=x, y=y, fill = value_c))+
+  facet_wrap(~variable)+
+  scale_fill_manual(name = "Land Cover Classes",
+                    values = c("Dark GH" = "gray",
+                               "Light GH" = "lightskyblue1",
+                               "Open Ground" = "navajowhite1",
+                               "Orchard and Vegetation" = "dark green"))+
+  coord_fixed(ratio = 1)+
+  theme(legend.position="bottom")+
+  scale_x_continuous(breaks = seq(705000, 709000, by = 2000))+
+  scale_y_continuous(breaks = seq(3360000,3364000, by = 2000))
+dev.off()
+
 
 #plotRGB(crop_rasters$LT05_L2SP_174039_19900227_20200916_02_T1, 3, 2, 1, scale = 1)
 
