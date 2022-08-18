@@ -114,6 +114,20 @@ rast_cc = function(tif_cc){
   return(r_tif_cc)
 }
 
+#turns raster in to dataframe so it can be plotted with ggplot
+raster_to_df = function(rast_to_df) { 
+  df = as.data.frame(rast_to_df, xy = TRUE) %>%
+    melt(id.vars = c("x", "y")) %>%
+    mutate(value_c = value)
+  
+  df$value_c = as.character(df$value_c)
+  df["value_c"][df["value_c"] == 1] = "Dark GH"
+  df["value_c"][df["value_c"] == 2] = "Open Ground"
+  df["value_c"][df["value_c"] == 3] = "Light GH"
+  df["value_c"][df["value_c"] == 4] = "Orchard and Vegetation"
+  return(df)
+}
+
 #create a table with the frequency of each ground type in every raster, takes raster list and yishuv
 frequency_table = function(tif_cc, yishuv){
   #gets name of pic with out .tif at end and ./croppped/ at begining
