@@ -122,6 +122,12 @@ crop_rasters_l8 = crop_rasters[as.numeric(years) >= 2013]
 # crop_rasters_l5 = crop_rasters[4:11]
 # crop_rasters_l8 = crop_rasters[1:3]
 
+fullarea = list.files(fullarea_dir, pattern = "tif$",
+                         full.names = TRUE)
+fullarea <- fullarea[grep(pattern = "Full_Area", x = fullarea)]  #takes only ... by pattern
+
+rast_4_RF_l5 = rast(fullarea[5])
+rast_4_RF_l8 = rast(fullarea[9])
 #'---------------------------------
 #' Random Forest classification
 #'---------------------------------
@@ -397,51 +403,64 @@ dev.off()
 
 #turn the rasters into df to plot with ggplot
 df_hazeva = raster_to_df(rast_cc_hazeva)
+df_hazeva = df_hazeva %>%
+  separate(variable, c("yishuv", "year"), "_")
 df_ein_yahav = raster_to_df(rast_cc_ein_yahav)
+df_ein_yahav = df_ein_yahav %>%
+  separate(variable, c("yishuv1", "yishuv2", "year"), "_")%>%
+  unite(yishuv, c(yishuv1, yishuv2))
 df_paran = raster_to_df(rast_cc_paran)
+df_paran = df_paran%>%
+  separate(variable, c("yishuv", "year"), "_")
 
-pdf("./output/hazeva_9_n.pdf", width = 10, height = 8)
+pdf("./output/hazeva_9_n1.pdf", width = 10, height = 8)
 ggplot()+
   geom_raster(data = df_hazeva, aes(x=x, y=y, fill = value_c))+
-  facet_wrap(~variable)+
-  scale_fill_manual(name = "Land Cover Classes",
-                    values = c("Dark GH" = "gray",
-                               "Light GH" = "lightskyblue1",
+  facet_wrap(~year)+
+  scale_fill_manual(name = "LCLU Classes",
+                    values = c("Dark PA" = "salmon3",
+                               "Light PA" = "lightskyblue1",
                                "Open Ground" = "navajowhite1",
-                               "Orchard and Vegetation" = "dark green"))+
+                               "Orchard/Vegetation" = "forestgreen"))+
   coord_fixed(ratio = 1)+
   theme(legend.position="bottom")+
+  labs(title = "Hazeva")+
+  theme(plot.title=element_text(hjust=0.5))+
   #geom_sf(fill = "transparent", data = b_h) #changes the coords to geo
   scale_x_continuous(breaks = seq(712500, 722500, by = 2000))+
   scale_y_continuous(breaks = seq(3402500,3410000, by = 2000))
 dev.off()
 
-pdf("./output/ein_yahav_9_n.pdf", width = 8, height = 10)
+pdf("./output/ein_yahav_9_n1.pdf", width = 8, height = 10)
 ggplot()+
   geom_raster(data = df_ein_yahav, aes(x=x, y=y, fill = value_c))+
-  facet_wrap(~variable)+
-  scale_fill_manual(name = "Land Cover Classes",
-                    values = c("Dark GH" = "gray",
-                               "Light GH" = "lightskyblue1",
+  facet_wrap(~year)+
+  scale_fill_manual(name = "LCLU Classes",
+                    values = c("Dark PA" = "salmon3",
+                               "Light PA" = "lightskyblue1",
                                "Open Ground" = "navajowhite1",
-                               "Orchard and Vegetation" = "dark green"))+
+                               "Orchard/Vegetation" = "forestgreen"))+
   coord_fixed(ratio = 1) +
   theme(legend.position="bottom")+
+  labs(title = "Ein Yahav")+
+  theme(plot.title=element_text(hjust=0.5))+
   scale_x_continuous(breaks = seq(712500, 717500, by = 2500))+
   scale_y_continuous(breaks = seq(3390000,3400000, by = 2500))
 dev.off()
 
-pdf("./output/paran_9_n.pdf", width = 10, height = 9)
+pdf("./output/paran_9_n1.pdf", width = 10, height = 9)
 ggplot()+
   geom_raster(data = df_paran, aes(x=x, y=y, fill = value_c))+
-  facet_wrap(~variable)+
-  scale_fill_manual(name = "Land Cover Classes",
-                    values = c("Dark GH" = "gray",
-                               "Light GH" = "lightskyblue1",
+  facet_wrap(~year)+
+  scale_fill_manual(name = "LCLU Classes",
+                    values = c("Dark PA" = "salmon3",
+                               "Light PA" = "lightskyblue1",
                                "Open Ground" = "navajowhite1",
-                               "Orchard and Vegetation" = "dark green"))+
+                               "Orchard/Vegetation" = "forestgreen"))+
   coord_fixed(ratio = 1)+
   theme(legend.position="bottom")+
+  labs(title = "Paran")+
+  theme(plot.title=element_text(hjust=0.5))+
   scale_x_continuous(breaks = seq(705000, 709000, by = 2000))+
   scale_y_continuous(breaks = seq(3360000,3364000, by = 2000))
 dev.off()
