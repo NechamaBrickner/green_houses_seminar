@@ -9,7 +9,7 @@ pkg_list = c(
   "glcm",            # Greylevel co-location matrix
   "caret","ranger",  # ML models
   "dplyr", "tools",
-  "reshape"
+  "reshape", "tidyr"
 )
 
 # installs packages that are not installed 
