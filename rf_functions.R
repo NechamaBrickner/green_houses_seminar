@@ -1,56 +1,4 @@
 
-# Random Forest functions based of of klils
-
-# CropRast_4_RF <- function(landsat_dir){
-#   # "landsat_dir" is input folder with the tifs to make the list
-#   # take only the tifs with "_SR_" in name
-#   # select bands to take
-#   # create a raster stack with the wanted bands
-#   # give the bands names by color/wavelength 
-#   tif_list_RF = list.files(landsat_dir, pattern = "TIF$", full.names = TRUE)
-#   tif_list_RF <- tif_list_RF[grep(pattern="_SR_", x=tif_list_RF)]
-#   tif_list_RF <- tif_list_RF[grep(pattern = "B1|B2|B3|B4|B5|B6|B7",
-#                                   x = tif_list_RF)]
-#   # create terra::SpatRaster (stack)
-#   tif_stk_RF <- rast(tif_list_RF)
-#   names(tif_stk_RF) <- c("aerosol", "blue", "green", "red",
-#                       "NIR", "SWIR1", "SWIR2") 
-#   # load shpfile of classification area
-#   classification_shp <- vect(file.path(GIS_dir, "greenhouses.gpkg"),
-#                              layer="classification_area")
-#   
-#   # crop and mask the raster with the shpfile
-#   crop_rast <- terra::crop(tif_stk_RF, classification_shp)
-#   masked_rast <- terra::mask(crop_rast, classification_shp)
-#   
-#   return(masked_rast)
-# }
-# 
-# 
-# AddAllBands <- function(raster) {
-#   # create glcm texture bands to the green band of the raster
-#     # to use glcm the band raster need to be in raster format and not terra-rast
-#   # texture bands are variance and second moment
-#   # give the texture bands names
-#   # create an NDVI band
-#   # give it a name
-#   texture = glcm(raster(raster$green), 
-#                  statistics = c('variance','contrast','dissimilarity'), 
-#                  na_opt = "ignore")
-#   names(texture) <- c("variance", "contrast","dissimilarity") 
-#   ndvi = (raster$NIR - raster$red)/(raster$NIR + raster$red)
-#   names(ndvi) = "NDVI"
-#   savi = 1.5*((raster$NIR - raster$red)/(raster$NIR + raster$red + 0.5))
-#   names(savi) = "SAVI"
-#   
-#   # combine all the bands to 1 raster
-#     # the texture bands need to be converted to terra-rast format
-#   allbands <- c(raster, rast(texture), ndvi, savi)
-#   #allbands <- c(raster, rast(texture), ndvi)
-#   return(allbands)
-# }
-
-
 
 CreateTrainingDF <- function(r, training_data, bands){
   # parameters in the function:
@@ -73,30 +21,13 @@ CreateTrainingDF <- function(r, training_data, bands){
   extract_points$ground_type = factor(training_data$Ground_Typ)
   extract_points = select(extract_points, -ID)
   
-  # # get rid of the geometry field in training_data table
-  # # join the training data with the extract_points
-  # training_data = st_drop_geometry(training_data)
-  # training_data = left_join(training_data, extract_points, by = c("Id" = "ID"))
-  # 
-  # # create a table with the names of classes and the number for each class as a factor
-  # class_name = unique(training_data$Ground_Typ)
-  # class_factor = 1:length(class_name)
-  # class = as.data.frame(cbind(class_name, class_factor))
-  # class$class_factor = factor(class$class_factor, labels = class_name)
-  # 
-  # join the training_data table with the factor data 
-  # get rid of columns that aren't needed
-  # training_data = full_join(training_data, class, by = c("Ground_Typ" = "class_name"))
-  # training_data = select(training_data, -Ground_Typ, -Area)
-  
   # count number of incomplete rows and erases them
   cnt_na <- sum(!complete.cases(extract_points))
   if (cnt_na > 0) {
     print(paste("Number of rows with NA:", cnt_na, "(removing...)"))
     extract_points <- extract_points[complete.cases(extract_points),]
   }
-  # get rid of rows with NA
-  # training_data = na.omit(training_data)
+  
 
   return(extract_points)
 }
@@ -280,7 +211,6 @@ classified_rasters = function(tif_cropped, bands, fit, landsat) {
 
 PlotClassified <- function(rast_list, classified_list) {
   # to add to plots
-  #colors = c("gray", "yellow", "cyan", "dark green", "black", "blue")
   colors = c("gray", "yellow", "cyan", "dark green", "blue")
   par(mfrow = c(2,1))
   lapply(seq_along(rast_list), function(i){
