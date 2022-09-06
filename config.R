@@ -21,16 +21,6 @@ if (any(installed_packages == FALSE)) {
 # Package loading
 lapply(pkg_list, library, character.only = TRUE)
 
-# not using supercells
-# # install.packages("remotes")
-# # add if not installed, install now
-# if(!require(supercells)){
-#   remotes::install_github("Nowosad/supercells")
-#   library("supercells")
-# }
-
-# remotes::install_github("Nowosad/supercells")
-# library("supercells")
 
 # creates folder Paths
 # -------------------------
@@ -41,7 +31,6 @@ if (!dir.exists(GIS_dir)) {
   dir.create(GIS_dir)
 }
 
-#do we need this folder cuz we already have the images
 # folder w/ downloaded landsat 
 datasets_dir = "./Landsat_datasets"
 if (!dir.exists(datasets_dir)) {
@@ -78,17 +67,6 @@ if (!dir.exists(classified_cropped_dir)) {
   dir.create(classified_cropped_dir)
 }
 
-# # folder for  LST output
-# LST_dir = "./output/LST"
-# if (!dir.exists(LST_dir)) {
-#   dir.create(LST_dir)
-# }
-# 
-# # folder for  LST output
-# albedo_dir = "./output/albedo"
-# if (!dir.exists(albedo_dir)) {
-#   dir.create(albedo_dir)
-# }
 
 landsat5 = "l5"
 landsat8 = "l8"
